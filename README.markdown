@@ -13,3 +13,11 @@
 Каждое задание выполняется в своей ветке. После выполнения задания сделать git push -u origin <название_ветки> и создать pull request в master
 
 ![Game schema](https://raw.githubusercontent.com/CrissNamon/clojure-game/master/game_schema_base.png)
+
+## Команды для использования групп
+- add_group name
+- join_group name
+- current_group
+- say_group message
+- list_groups
+- leave_group
