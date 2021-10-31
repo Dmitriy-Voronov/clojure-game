@@ -34,6 +34,56 @@
          (look))
        "You can't go that way."))))
 
+(defn add_group
+  [name]
+  (dosync
+   (if (contains? @player/groups name)
+    (str "Group " name " already exists.")
+    (do
+    (commute player/groups assoc name (ref #{}) )
+    (str "Group " name " was created.")))))
+
+(defn join_group
+  [name] 
+  (dosync
+     (if (contains? @player/groups name)
+     (
+       do 
+      (if (not (empty? @player/*group*)) 
+        (commute (get @player/groups @player/*group*) disj player/*name*)) 
+      (ref-set player/*group* name)
+      (commute (get @player/groups name) conj player/*name*)
+      (str "You joined into the group " name  ".\n"
+      "Group members: " (str/join ", " @(get @player/groups name)) ))
+      (str "Group " name " doesn't exists, type 'add_group groupname' to create new"))))
+
+(defn leave_group
+  [] 
+  (dosync
+     (do 
+      (commute (get @player/groups @player/*group*) disj player/*name*)
+      (ref-set player/*group* "")
+      (str "You leaved the group"))))
+
+(defn say_group
+  "Say something out loud so everyone in the room can hear."
+  [& words]
+  (if (empty? @player/*group*)
+  (str "You are not in group yet")
+  (let [message (str/join " " words)]
+    (doseq [inhabitant (disj @(get @player/groups @player/*group*)
+                             player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+        (println message)
+        (println player/prompt)))
+    (str "You said to group: " message))))
+
+(defn list_groups
+  []
+  (str/join ", " (keys @player/groups)))
+
+(defn current_group [] (str @player/*group*))
+
 (defn grab
   "Pick something up."
   [thing]
@@ -103,7 +153,14 @@
                "detect" detect
                "look" look
                "say" say
-               "help" help})
+               "help" help
+               "add_group" add_group
+               "join_group" join_group
+               "current_group" current_group
+               "say_group" say_group,
+               "list_groups" list_groups,
+               "leave_group" leave_group
+               })
 
 ;; Command handling
 
