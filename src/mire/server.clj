@@ -31,7 +31,9 @@
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref (@rooms/rooms :start))
-              player/*inventory* (ref #{})]
+              player/*inventory* (ref #{})
+              player/*group* (ref "")
+              ]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*))
