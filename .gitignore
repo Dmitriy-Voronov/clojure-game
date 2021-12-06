@@ -4,3 +4,7 @@ classes/
 target/
 /.lein-repl-history
 /.nrepl-port
+.idea
+*.iws
+*.iml
+*.ipr
