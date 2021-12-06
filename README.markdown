@@ -21,3 +21,6 @@
 - say_group message
 - list_groups
 - leave_group
+
+## Команды для врагов
+- show_enemies (Показывает всех врагов на локации)
