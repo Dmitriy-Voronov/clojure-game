@@ -3,9 +3,11 @@
             [clojure.java.io :as io]
             [mire.commands :refer :all]
             [mire.player :as player]
-            [mire.rooms :as rooms]))
+            [mire.rooms :as rooms]
+            [mire.enemies :as enemies]))
 
 (rooms/add-rooms "resources/rooms/")
+(enemies/add-enemies "resources/enemies/")
 
 (defmacro def-command-test [name & body]
   `(deftest ~name

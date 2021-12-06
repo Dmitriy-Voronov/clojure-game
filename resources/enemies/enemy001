@@ -1,0 +1,6 @@
+{
+    :name "Test enemy"
+    :baseHp 100
+    :baseDamage 3
+    :drops #{:detector}
+}

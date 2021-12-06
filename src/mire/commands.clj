@@ -1,7 +1,8 @@
 (ns mire.commands
   (:require [clojure.string :as str]
             [mire.rooms :as rooms]
-            [mire.player :as player]))
+            [mire.player :as player]
+            [mire.enemies :as enemies]))
 
 (defn- move-between-refs
   "Move one instance of obj between from and to. Must call in a transaction."
@@ -84,6 +85,19 @@
 
 (defn current_group [] (str @player/*group*))
 
+(defn show-enemies
+  "Get a description of enemies at current location."
+  []
+  (if (= 0 (count @(:enemies @player/*current-room*))) "There is no enemies here."
+  (str
+    "Enemies at this location: \n"
+       (str/join "\n" (map #(
+                             (fn []
+                               (def entry (get @enemies/enemies %))
+                               (str (:name entry) " (HP: " (:baseHp entry) ", DMG: " (:baseDamage entry) ")\n")))
+                           @(:enemies @player/*current-room*))))))
+
+
 (defn grab
   "Pick something up."
   [thing]
@@ -159,7 +173,8 @@
                "current_group" current_group
                "say_group" say_group,
                "list_groups" list_groups,
-               "leave_group" leave_group
+               "leave_group" leave_group,
+               "show_enemies" show-enemies
                })
 
 ;; Command handling
