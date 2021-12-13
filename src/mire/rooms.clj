@@ -9,6 +9,7 @@
            {:name (keyword (.getName file))
             :desc (:desc room)
             :exits (ref (:exits room))
+            :enemies (ref (or (:enemies room) #{}))
             :items (ref (or (:items room) #{}))
             :inhabitants (ref #{})}})))
 
@@ -30,3 +31,9 @@
 (defn room-contains?
   [room thing]
   (@(:items room) (keyword thing)))
+
+(defn room-contains-enemy?
+  "Checks if there is an enemy with given name in given room."
+  [room enemy]
+  (@(:enemies room) (keyword enemy)))
+
