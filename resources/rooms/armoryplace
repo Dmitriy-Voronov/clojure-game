@@ -1,0 +1,3 @@
+{:desc "There are a lot of weapons here and smell like gunpowder."
+ :exits {:north :wardrobe}
+ :items #{:keys}}
