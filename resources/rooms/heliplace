@@ -1,0 +1,3 @@
+{:desc "it's so windy and cold. About the helicopter!"
+ :exits {:down :garage}
+ :items #{:keys}}

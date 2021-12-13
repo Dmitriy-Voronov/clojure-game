@@ -1,0 +1,3 @@
+{:desc "There are so many supplies here."
+ :exits {:south :station}
+ :items #{:keys}}

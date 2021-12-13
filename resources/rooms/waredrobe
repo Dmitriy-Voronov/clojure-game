@@ -1,0 +1,3 @@
+{:desc "There are so many things here and it smells strange."
+ :exits {:up :roof :west :station :south :armoryplace}
+ :items #{:keys}}

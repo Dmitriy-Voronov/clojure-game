@@ -1,0 +1,3 @@
+{:desc "It's so fresh and beautiful here."
+ :exits {:down :wardrobe}
+ :items #{:keys}}

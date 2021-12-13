@@ -1,0 +1,2 @@
+{:desc "There is a cool bike here. Wow and there's still a ladder to the top!"
+ :exits {:up :heliplace :north :station}}
