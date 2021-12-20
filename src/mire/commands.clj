@@ -4,6 +4,8 @@
             [mire.player :as player]
             [mire.enemies :as enemies]))
 
+(defn add-points [count] (dosync (do (commute player/points assoc (keyword player/*name*) (+ count (get @player/points (keyword player/*name*)))))))
+
 (defn- move-between-refs
   "Move one instance of obj between from and to. Must call in a transaction."
   [obj from to]
@@ -32,6 +34,7 @@
                             (:inhabitants @player/*current-room*)
                             (:inhabitants target))
          (ref-set player/*current-room* target)
+         (add-points 1)
          (look))
        "You can't go that way."))))
 
@@ -97,6 +100,7 @@
                                (str (:name entry) " (HP: " (:baseHp entry) ", DMG: " (:baseDamage entry) ")\n")))
                            @(:enemies @player/*current-room*))))))
 
+(defn get-points [] (str (get @player/points (keyword player/*name*))))
 
 (defn grab
   "Pick something up."
@@ -168,7 +172,9 @@
                                          )
                                        )
                                      (if (< x 1)
-                                       (println (str name " is dead"))
+                                       (do (println (str name " is dead"))
+                                           (add-points 10)
+                                           )
                                        (
                                         (ref-set pokemon_hp (- pokemon_hp (:baseDamage entry)))
                                         (println (str name " hit " namepokemon ". Power of hit: " (:baseDamage entry) ". Remaining health: " pokemon_hp))
@@ -218,7 +224,8 @@
                "list_groups" list_groups,
                "leave_group" leave_group,
                "show_enemies" show-enemies,
-               "attack" attack
+               "attack" attack,
+               "points" get-points
                })
 
 ;; Command handling

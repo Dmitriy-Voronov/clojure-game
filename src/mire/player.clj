@@ -5,6 +5,7 @@
 (def ^:dynamic *name*)
 (def ^:dynamic *group*)
 
+(def points (ref {}))
 (def prompt "> ")
 (def streams (ref {}))
 (def groups (ref {}))
