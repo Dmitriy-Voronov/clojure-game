@@ -4,6 +4,8 @@
             [mire.player :as player]
             [mire.enemies :as enemies]))
 
+(defn add-points [count] (dosync (do (commute player/points assoc (keyword player/*name*) (+ count (get @player/points (keyword player/*name*)))))))
+
 (defn- move-between-refs
   "Move one instance of obj between from and to. Must call in a transaction."
   [obj from to]
@@ -32,6 +34,7 @@
                             (:inhabitants @player/*current-room*)
                             (:inhabitants target))
          (ref-set player/*current-room* target)
+         (add-points 1)
          (look))
        "You can't go that way."))))
 
@@ -97,6 +100,7 @@
                                (str (:name entry) " (HP: " (:baseHp entry) ", DMG: " (:baseDamage entry) ")\n")))
                            @(:enemies @player/*current-room*))))))
 
+(defn get-points [] (str (get @player/points (keyword player/*name*))))
 
 (defn grab
   "Pick something up."
@@ -161,6 +165,8 @@
                "south" (fn [] (move :south)),
                "east" (fn [] (move :east)),
                "west" (fn [] (move :west)),
+               "up" (fn [] (move :up)),
+               "down" (fn [] (move :down)),
                "grab" grab
                "discard" discard
                "inventory" inventory
@@ -174,7 +180,8 @@
                "say_group" say_group,
                "list_groups" list_groups,
                "leave_group" leave_group,
-               "show_enemies" show-enemies
+               "show_enemies" show-enemies,
+               "points" get-points
                })
 
 ;; Command handling
