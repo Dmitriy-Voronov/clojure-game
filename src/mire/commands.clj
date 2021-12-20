@@ -151,6 +151,49 @@
         (println player/prompt)))
     (str "You said " message)))
 
+
+(defn attack
+      "Attack enemy"
+      [name namepokemon]
+
+      (if (= 0 (count @(:enemies @player/*current-room*))) "There is no enemies here."
+         (map #(
+                (fn []
+                    (def entry (get @enemies/enemies %))
+                    (if (= (:name entry) name)
+                      (if (> (:baseHp entry) 0)
+                         (loop [x (:baseHp entry) y pokemon_hp]
+                               (when (or (< x 1) (< y 1))
+                                     (if (< y 1)
+                                       (println (str namepokemon " is dead"))
+                                       (
+                                        (ref-set (:baseHp entry) (- @(:baseHp entry) pokemon_dmg))
+                                        (println (str namepokemon " hit " name ". Power of hit: " pokemon_dmg ". Remaining health: " (:baseHp entry)))
+                                         )
+                                       )
+                                     (if (< x 1)
+                                       (do (println (str name " is dead"))
+                                           (add-points 10)
+                                           )
+                                       (
+                                        (ref-set pokemon_hp (- pokemon_hp (:baseDamage entry)))
+                                        (println (str name " hit " namepokemon ". Power of hit: " (:baseDamage entry) ". Remaining health: " pokemon_hp))
+                                        )
+                                       )
+                                     (recur (- x pokemon_dmg) (- y (:baseDamage entry)))
+                                     )
+                         )
+                        (str "He is already dead")
+                        )
+                      (str "He isn't here")
+                      )
+                    )
+                )
+              @(:enemies @player/*current-room*))
+      )
+)
+
+
 (defn help
   "Show available commands and what they do."
   []
@@ -167,20 +210,21 @@
                "west" (fn [] (move :west)),
                "up" (fn [] (move :up)),
                "down" (fn [] (move :down)),
-               "grab" grab
-               "discard" discard
-               "inventory" inventory
-               "detect" detect
-               "look" look
-               "say" say
-               "help" help
-               "add_group" add_group
-               "join_group" join_group
-               "current_group" current_group
+               "grab" grab,
+               "discard" discard,
+               "inventory" inventory,
+               "detect" detect,
+               "look" look,
+               "say" say,
+               "help" help,
+               "add_group" add_group,
+               "join_group" join_group,
+               "current_group" current_group,
                "say_group" say_group,
                "list_groups" list_groups,
                "leave_group" leave_group,
                "show_enemies" show-enemies,
+               "attack" attack,
                "points" get-points
                })
 
